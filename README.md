@@ -41,4 +41,6 @@ places. Locale selection is `?lang=` → `localStorage` → English.
 
 ## Deploy
 
-GitHub Pages, `main` branch, root directory. Push and it ships.
+Push to `main`. `.github/workflows/deploy.yml` publishes the repo root to GitHub Pages.
+
+Requires Settings → Pages → Source set to **GitHub Actions**.

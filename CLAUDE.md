@@ -5,12 +5,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repo is
 
 The landing site for Arlo AI at the apex domain **arlo-ai.app**. It is only a website —
-no application code. Static HTML/CSS/JS with **no build step, no dependencies, and no CI**;
-GitHub Pages serves `main` at the repo root, so a push is a deploy.
+no application code. Static HTML/CSS/JS with **no build step and no dependencies**; a push
+to `main` publishes the repo root to GitHub Pages via `.github/workflows/deploy.yml`.
 
-Do not introduce a framework, bundler, package manager, or GitHub Action here. The absence
-of a build step is deliberate — it is what keeps this site trivially in sync with the three
-project sites, which are built the same way.
+Do not introduce a framework, bundler, or package manager here. The absence of a build step
+is deliberate — it is what keeps this site trivially in sync with the three project sites,
+which are built the same way. The workflow uploads the repo root as-is; there is nothing to
+compile, and no build step should be added to it.
 
 ```
 index.html   the whole page; English copy lives here, marked up with data-i18n keys
@@ -24,7 +25,7 @@ CNAME        arlo-ai.app
 
 ## Commands
 
-There is no build, lint, or test suite. To preview:
+There is no build, lint, or test suite — CI only publishes. To preview:
 
 ```bash
 python3 -m http.server 8000
@@ -96,5 +97,9 @@ pills like "BYO key" carry a `data-i18n` key.
 
 ## Deploy
 
-Push to `main`. Pages serves the root directory. DNS for the apex and the `rust` subdomain
-is managed in Route 53 outside this repo.
+Push to `main` — `.github/workflows/deploy.yml` uploads the repo root and deploys it.
+Repo Settings → Pages → Source must be **GitHub Actions** (not "Deploy from a branch"), or
+the workflow fails at `configure-pages`. `.git` and `.github` are excluded from the
+artifact; everything else ships, including `CNAME`.
+
+DNS for the apex and the `rust` subdomain is managed in Route 53 outside this repo.
