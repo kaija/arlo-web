@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V1VKW0GHEB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-V1VKW0GHEB');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="meta.title">Arlo AI — Open Source Agentic AI, Top to Bottom</title>
+  <meta name="description" data-i18n-attr="content:meta.description" content="Arlo AI builds free, open-source agentic AI: a private local agent runtime in Rust, an iOS client that talks straight to your own LLM, and a Rust implementation of the AG-UI protocol." />
+  <meta name="theme-color" content="#5856D6" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" data-i18n-attr="content:meta.title" content="Arlo AI — Open Source Agentic AI, Top to Bottom" />
+  <meta property="og:description" data-i18n-attr="content:meta.description" content="Free and open-source agentic AI: a private local agent runtime, an iOS LLM client, and the AG-UI protocol in Rust." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://arlo-ai.app" />
+  <link rel="canonical" href="https://arlo-ai.app" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav" aria-label="Main navigation">
+    <div class="nav-inner container">
+      <a href="/" class="nav-brand" aria-label="Arlo AI home">
+        <svg class="nav-logo" width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <rect width="28" height="28" rx="7" fill="#5856D6"/>
+          <path d="M8 20L14 8L20 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M10.6 15.4H17.4" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span>Arlo AI</span>
+      </a>
+      <div class="nav-links">
+        <a href="#projects" data-i18n="nav.projects">Projects</a>
+        <a href="#stack" data-i18n="nav.stack">How it fits</a>
+        <a href="#principles" data-i18n="nav.principles">Principles</a>
+        <div class="lang-switch" role="group" data-i18n-attr="aria-label:nav.language">
+          <button type="button" data-lang="en" aria-current="true">EN</button>
+          <button type="button" data-lang="zh-Hant">繁中</button>
+          <button type="button" data-lang="ja">日本語</button>
+        </div>
+        <a href="https://github.com/kaija" class="btn btn-sm" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+      </div>
+      <button class="nav-toggle" data-i18n-attr="aria-label:nav.toggle" aria-label="Toggle menu" aria-expanded="false">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge" data-i18n="hero.badge">Free &amp; Open Source · MIT</div>
+      <h1 data-i18n="hero.title">Open source agentic AI,<br/>top to bottom.</h1>
+      <p class="hero-subtitle" data-i18n="hero.subtitle">
+        Arlo AI is a family of open-source projects for running AI agents on your own terms — a private agent runtime for your machine, a mobile client that talks straight to your provider, and the protocol layer that connects an agent to any frontend. No backend of ours in between. Ever.
+      </p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary" data-i18n="hero.ctaPrimary">Explore the projects</a>
+        <a href="https://github.com/kaija" class="btn btn-secondary" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          <span data-i18n="hero.ctaSecondary">View on GitHub</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="projects">
+    <div class="container">
+      <div class="section-header">
+        <h2 data-i18n="projects.heading">Three projects, one idea</h2>
+        <p data-i18n="projects.sub">Every one of them free, MIT-licensed, and yours to run.</p>
+      </div>
+      <div class="projects-grid">
+
+        <div class="project-card">
+          <svg class="project-logo" width="40" height="40" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <rect width="28" height="28" rx="7" fill="#5856D6"/>
+            <path d="M8 9L13 14L8 19" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 19H20" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <h3>Arlo Rust</h3>
+          <p data-i18n="projects.rust.body">A private, local-first agent that speaks whichever interface you need — an interactive TUI, a one-shot CLI, or an embeddable library — and runs on macOS, Windows, and Linux. Your keys, your machine.</p>
+          <div class="project-pills">
+            <span class="pill">Rust</span>
+            <span class="pill">TUI · CLI</span>
+            <span class="pill">MCP</span>
+          </div>
+          <div class="project-links">
+            <a href="https://rust.arlo-ai.app" data-i18n="projects.visit">Visit site →</a>
+            <a href="https://github.com/kaija/arlo" class="link-muted" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <svg class="project-logo" width="40" height="40" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <rect width="28" height="28" rx="7" fill="#5856D6"/>
+            <path d="M8 20L14 8L20 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10 16H18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <h3>Arlo Lite</h3>
+          <p data-i18n="projects.lite.body">A React Native iOS app for talking to LLMs on the go. Bring your own API key and connect direct to your provider — no account, no subscription, nothing sitting in between.</p>
+          <div class="project-pills">
+            <span class="pill">React Native</span>
+            <span class="pill">iOS</span>
+            <span class="pill" data-i18n="pills.byok">BYO key</span>
+          </div>
+          <div class="project-links">
+            <a href="https://lite.arlo-ai.app" data-i18n="projects.visit">Visit site →</a>
+            <a href="https://github.com/kaija/arlo-lite-ios" class="link-muted" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <svg class="project-logo" width="40" height="40" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <rect width="28" height="28" rx="7" fill="#5856D6"/>
+            <path d="M6 14h4l2-6 4 12 2-6h4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <h3>AG-UI Rust</h3>
+          <p data-i18n="projects.agui.body">An up-to-date Rust implementation of the AG-UI protocol — the standard, event-based interface that lets a web or app frontend drive Arlo Rust, wire-compatible with the TypeScript and Python SDKs.</p>
+          <div class="project-pills">
+            <span class="pill">Rust</span>
+            <span class="pill">AG-UI</span>
+            <span class="pill">SSE</span>
+          </div>
+          <div class="project-links">
+            <a href="https://ag-ui-rust.arlo-ai.app" data-i18n="projects.visit">Visit site →</a>
+            <a href="https://github.com/kaija/ag-ui-rust" class="link-muted" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- How it fits together -->
+  <section id="stack" class="stack">
+    <div class="container">
+      <div class="section-header">
+        <h2 data-i18n="stack.heading">How it fits together</h2>
+        <p data-i18n="stack.sub">Two independent paths to the same place — your own model, without a middleman.</p>
+      </div>
+      <div class="stack-diagram">
+        <div class="stack-flow">
+          <div class="stack-node">
+            <strong data-i18n="stack.frontends.title">Web · Desktop · Mobile frontends</strong>
+            <span data-i18n="stack.frontends.body">Whatever you want to build</span>
+          </div>
+          <div class="stack-arrow" aria-hidden="true">↕</div>
+          <div class="stack-node stack-node-accent">
+            <strong>AG-UI Rust</strong>
+            <span data-i18n="stack.agui.body">The standard AG-UI interface</span>
+          </div>
+          <div class="stack-arrow" aria-hidden="true">↕</div>
+          <div class="stack-node stack-node-accent">
+            <strong>Arlo Rust</strong>
+            <span data-i18n="stack.rust.body">Private, local agent runtime</span>
+          </div>
+          <div class="stack-arrow" aria-hidden="true">↕</div>
+          <div class="stack-node">
+            <strong data-i18n="stack.provider.title">Your own LLM provider</strong>
+            <span data-i18n="stack.provider.body">Hosted, self-hosted, or local</span>
+          </div>
+        </div>
+
+        <div class="stack-divider" data-i18n="stack.or">or, straight from your pocket</div>
+
+        <div class="stack-aside">
+          <div class="stack-node stack-node-accent">
+            <strong>Arlo Lite</strong>
+            <span data-i18n="stack.lite.body">iOS, standalone</span>
+          </div>
+          <div class="stack-arrow" aria-hidden="true">→</div>
+          <div class="stack-node">
+            <strong data-i18n="stack.provider.title">Your own LLM provider</strong>
+            <span data-i18n="stack.lite.direct">Connected direct, no backend</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Principles -->
+  <section id="principles" class="features">
+    <div class="container">
+      <div class="section-header">
+        <h2 data-i18n="principles.heading">What we won't compromise on</h2>
+        <p data-i18n="principles.sub">The same four commitments across every project.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.6 7.6a5 5 0 11-7.1 7.1 5 5 0 017.1-7.1zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3"/></svg>
+          </div>
+          <h3 data-i18n="principles.keys.title">Bring your own keys</h3>
+          <p data-i18n="principles.keys.body">Your credentials stay on your machine and go straight to your provider. We never see them, because there is nowhere for them to go.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01M6 18h.01"/></svg>
+          </div>
+          <h3 data-i18n="principles.backend.title">No backend, no subscription</h3>
+          <p data-i18n="principles.backend.body">There is no Arlo server to sign up for, no seat to pay for, and no account to create. You pay your model provider and nobody else.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20 15.3 15.3 0 010-20z"/></svg>
+          </div>
+          <h3 data-i18n="principles.agnostic.title">Provider-agnostic</h3>
+          <p data-i18n="principles.agnostic.body">Anthropic, any OpenAI-compatible API, or a model server running on your own hardware. Point it wherever you like and switch whenever you like.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15h6"/></svg>
+          </div>
+          <h3 data-i18n="principles.mit.title">MIT licensed, in the open</h3>
+          <p data-i18n="principles.mit.body">Every project is developed in public under the MIT license. Read it, fork it, ship it in your own product — no strings.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <svg class="nav-logo" width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <rect width="28" height="28" rx="7" fill="#5856D6"/>
+            <path d="M8 20L14 8L20 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10.6 15.4H17.4" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <span>Arlo AI</span>
+        </div>
+        <div class="footer-links">
+          <a href="https://rust.arlo-ai.app">Arlo Rust</a>
+          <a href="https://lite.arlo-ai.app">Arlo Lite</a>
+          <a href="https://ag-ui-rust.arlo-ai.app">AG-UI Rust</a>
+          <a href="https://github.com/kaija" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/kaija/arlo/blob/main/LICENSE" target="_blank" rel="noopener" data-i18n="footer.license">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="i18n.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
