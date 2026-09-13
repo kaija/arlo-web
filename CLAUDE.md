@@ -19,6 +19,7 @@ i18n.js      zh-Hant + ja overrides, and the language switcher
 main.js      mobile nav toggle (copied verbatim from arlo-lite's site)
 styles.css   design system shared with all three project sites
 404.html
+blog/        index.html lists posts; each post is blog/<slug>/index.html (see "Blog")
 CNAME        arlo-ai.app
 .nojekyll    without it, Pages' Jekyll silently drops _-prefixed paths
 ```
@@ -71,7 +72,7 @@ sections removed. The `:root` block, reset, `.container`, `.section-header`, `.n
 
 Treat those shared rules as a contract: if one changes here, it should change in the three
 sibling repos too, and vice versa. Hub-only additions (`.project-card`, `.stack-*`,
-`.lang-switch`) live after the shared blocks.
+`.lang-switch`, and the blog's `.blog-*` / `.post-*`) live after the shared blocks.
 
 Each project has its own glyph inside the same `#5856D6` rounded square (Arlo Rust `>`,
 Arlo Lite peak-with-bar, AG-UI waveform); the hub's "A" monogram is the parent mark. Project
@@ -94,6 +95,33 @@ to English rather than blanking.
 
 Proper nouns and acronyms in pills (Rust, iOS, MCP, SSE, AG-UI) stay untranslated; prose
 pills like "BYO key" carry a `data-i18n` key.
+
+## Blog
+
+Hand-written HTML, no generator. Every post exists in all three locales as separate static
+pages — long-form copy is far too big for `i18n.js`, and each translation should be crawlable:
+
+```
+blog/index.html                  post list; uses i18n.js (blog.* keys) like the hub
+blog/<slug>/index.html           English (canonical, x-default)
+blog/<slug>/zh-Hant/index.html
+blog/<slug>/ja/index.html
+```
+
+- Adding a post means three pages, plus a card in `blog/index.html` with its `blog.<post>.*`
+  keys in both locales of `i18n.js` (the card's `href` is swapped per locale too). Start by
+  copying an existing post; its translations share an identical element skeleton.
+- Post pages **don't load `i18n.js`**. Nav and footer labels are hardcoded per locale, and
+  the `.lang-switch` holds links to the sibling translations rather than buttons. Clicking one
+  also writes `localStorage.arloLang`, so the hub and blog index follow the reader's choice.
+- Each post declares `<html lang>`, a self-referencing `canonical`, and `hreflang` alternates
+  for all three locales plus `x-default` → English.
+- All links and assets are relative (`../../styles.css`, `../../../` from a translation), so
+  pages work under `http.server`, off disk, and on Pages alike.
+- Long-form typography is `.post-body` in `styles.css`. `.blog` / `.post` name CJK fonts
+  explicitly because Inter has no CJK glyphs; `:lang(ja)` swaps in Japanese faces.
+- The only script beyond `main.js` is inline: the TOC scroll-spy and the language-choice
+  persistence. Keep it inline and identical across a post's translations.
 
 ## Deploy
 

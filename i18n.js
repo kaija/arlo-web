@@ -7,8 +7,11 @@
  * Loaded with a plain <script> and not fetch(), so the page also works when
  * index.html is opened straight off disk over file://.
  *
- * ponytail: one file, three locales, one page. Split per-locale and lazy-load
- * if a fourth language or a second page ever shows up.
+ * Used by the hub (index.html) and the blog index (blog/index.html). Blog posts
+ * don't load it — each translation of a post is its own static page.
+ *
+ * ponytail: one file, three locales, two short pages. Split per-locale and
+ * lazy-load if a fourth language shows up or the dictionaries grow much further.
  */
 (function () {
   'use strict';
@@ -21,6 +24,7 @@
       'nav.projects': '專案',
       'nav.stack': '如何串接',
       'nav.principles': '原則',
+      'nav.blog': '部落格',
       'nav.language': '選擇語言',
       'nav.toggle': '開關選單',
 
@@ -61,7 +65,20 @@
       'principles.mit.title': 'MIT 授權，公開開發',
       'principles.mit.body': '每個專案都在 MIT 授權下公開開發。讀它、fork 它、放進你自己的產品裡 — 沒有附帶條件。',
 
-      'footer.license': '授權條款'
+      'footer.license': '授權條款',
+
+      'blog.meta.title': '部落格 — Arlo AI',
+      'blog.meta.description': '關於系統設計與工程實務的實戰筆記。',
+      'blog.badge': '部落格',
+      'blog.heading': '軟體開發筆記',
+      'blog.sub': '關於系統設計與工程實務的實戰筆記。每篇文章都有 English、繁體中文與日本語版本。',
+      'blog.readMore': '閱讀全文 →',
+      'pills.systemDesign': '系統設計',
+      'pills.architecture': '架構',
+      'blog.systemDesign.href': 'system-design-before-code/zh-Hant/',
+      'blog.systemDesign.title': '大公司裡的軟體開發：寫 Code 之前，你該先想清楚的事',
+      'blog.systemDesign.excerpt': '從「為什麼要做」到 Design Review，設計系統時該問哪些問題、每個問題背後在防什麼風險，用一個客服通話摘要系統的例子從頭講到尾。',
+      'blog.systemDesign.readTime': '閱讀時間約 25 分鐘'
     },
 
     ja: {
@@ -71,6 +88,7 @@
       'nav.projects': 'プロジェクト',
       'nav.stack': '構成',
       'nav.principles': '理念',
+      'nav.blog': 'ブログ',
       'nav.language': '言語を選択',
       'nav.toggle': 'メニューを開閉',
 
@@ -111,7 +129,20 @@
       'principles.mit.title': 'MIT ライセンス、開かれた開発',
       'principles.mit.body': 'すべてのプロジェクトを MIT ライセンスのもとで公開開発しています。読んで、フォークして、自分のプロダクトに載せてください。条件はありません。',
 
-      'footer.license': 'ライセンス'
+      'footer.license': 'ライセンス',
+
+      'blog.meta.title': 'ブログ — Arlo AI',
+      'blog.meta.description': 'システム設計とエンジニアリングの実践についての現場ノート。',
+      'blog.badge': 'ブログ',
+      'blog.heading': 'ソフトウェア開発ノート',
+      'blog.sub': 'システム設計とエンジニアリングの実践についての現場ノート。すべての記事を English・繁體中文・日本語で読めます。',
+      'blog.readMore': '続きを読む →',
+      'pills.systemDesign': 'システム設計',
+      'pills.architecture': 'アーキテクチャ',
+      'blog.systemDesign.href': 'system-design-before-code/ja/',
+      'blog.systemDesign.title': '大企業のソフトウェア開発：コードを書く前に考え抜くべきこと',
+      'blog.systemDesign.excerpt': '「なぜ作るのか」からデザインレビューまで。システム設計で問うべきことと、その問いが防ごうとしているリスクを、コールセンターの通話要約システムという実例を通して解説します。',
+      'blog.systemDesign.readTime': '読了時間 約35分'
     }
   };
 

@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V1VKW0GHEB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-V1VKW0GHEB');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Software development at a big company: what to figure out before you write code — Arlo AI Blog</title>
+  <meta name="description" content="From “why build this?” to the design review: the questions to ask when designing a system, and the risk behind each one, walked through with a call-summary system for a customer support team." />
+  <meta name="theme-color" content="#5856D6" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Software development at a big company: what to figure out before you write code" />
+  <meta property="og:description" content="From “why build this?” to the design review: the questions to ask when designing a system, and the risk behind each one, walked through with one real example." />
+  <meta property="og:type" content="article" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="zh_TW" />
+  <meta property="og:locale:alternate" content="ja_JP" />
+  <meta property="og:url" content="https://arlo-ai.app/blog/system-design-before-code/" />
+  <meta property="article:published_time" content="2026-09-13" />
+  <link rel="canonical" href="https://arlo-ai.app/blog/system-design-before-code/" />
+  <link rel="alternate" hreflang="en" href="https://arlo-ai.app/blog/system-design-before-code/" />
+  <link rel="alternate" hreflang="zh-Hant" href="https://arlo-ai.app/blog/system-design-before-code/zh-Hant/" />
+  <link rel="alternate" hreflang="ja" href="https://arlo-ai.app/blog/system-design-before-code/ja/" />
+  <link rel="alternate" hreflang="x-default" href="https://arlo-ai.app/blog/system-design-before-code/" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body class="post">
+  <!-- Navigation -->
+  <nav class="nav" aria-label="Main navigation">
+    <div class="nav-inner container">
+      <a href="../../" class="nav-brand" aria-label="Arlo AI home">
+        <svg class="nav-logo" width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <rect width="28" height="28" rx="7" fill="#5856D6"/>
+          <path d="M8 20L14 8L20 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M10.6 15.4H17.4" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span>Arlo AI</span>
+      </a>
+      <div class="nav-links">
+        <a href="../../#projects">Projects</a>
+        <a href="../" aria-current="page">Blog</a>
+        <div class="lang-switch" role="group" aria-label="Choose language">
+          <a href="./" hreflang="en" lang="en" data-lang="en" aria-current="true">EN</a>
+          <a href="zh-Hant/" hreflang="zh-Hant" lang="zh-Hant" data-lang="zh-Hant">繁中</a>
+          <a href="ja/" hreflang="ja" lang="ja" data-lang="ja">日本語</a>
+        </div>
+        <a href="https://github.com/kaija" class="btn btn-sm" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Post header -->
+  <header class="post-header">
+    <div class="container">
+      <div class="hero-badge">System design · Software engineering</div>
+      <h1>Software development at a big company:<br/>what to figure out before you write code</h1>
+      <p class="post-lede">From “why build this?” to the design review: which questions to ask when designing a system, what risk each one guards against, all walked through with one real example.</p>
+      <div class="post-meta">
+        <time datetime="2026-09-13">September 13, 2026</time>
+        <span>About a 30-minute read</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="post-layout">
+    <!-- Table of contents -->
+    <details class="post-toc" open>
+      <summary>Contents</summary>
+      <ol>
+        <li>
+          <a href="#before">Part 1: Before you design</a>
+          <ol>
+            <li><a href="#why">Why build this feature?</a></li>
+            <li><a href="#how">How will it be built?</a></li>
+            <li><a href="#scale">Users and data volume</a></li>
+            <li><a href="#limits">Constraints</a></li>
+            <li><a href="#cost">Cost per user</a></li>
+            <li><a href="#effort">People and time</a></li>
+            <li><a href="#compat">Existing systems</a></li>
+          </ol>
+        </li>
+        <li>
+          <a href="#during">Part 2: While you design</a>
+          <ol>
+            <li><a href="#owner">Think like an owner</a></li>
+            <li><a href="#poc">PoC vs. prototype</a></li>
+          </ol>
+        </li>
+        <li>
+          <a href="#review">Part 3: In the design review</a>
+          <ol>
+            <li><a href="#q1">Q1 Problem, features, scale</a></li>
+            <li><a href="#q2">Q2 Comparing approaches</a></li>
+            <li><a href="#q3">Q3 Task dispatch and queues</a></li>
+            <li><a href="#q4">Q4 Stateless vs. stateful</a></li>
+            <li><a href="#q5">Q5 Scaling</a></li>
+            <li><a href="#q6">Q6 Caching</a></li>
+            <li><a href="#q7">Q7 Database design</a></li>
+            <li><a href="#q8">Q8 Sync and concurrency</a></li>
+            <li><a href="#q9">Q9 Logging and auditing</a></li>
+            <li><a href="#q10">Q10 Monitoring</a></li>
+            <li><a href="#q11">Q11 Authn and authz</a></li>
+            <li><a href="#q12">Q12 Cost and capacity</a></li>
+            <li><a href="#q13">Q13 Failover</a></li>
+            <li><a href="#q14">Q14 Error handling</a></li>
+            <li><a href="#q15">Q15 Supported platforms</a></li>
+            <li><a href="#q16">Q16 System limits</a></li>
+            <li><a href="#q17">Q17 Troubleshooting</a></li>
+            <li><a href="#q18">Q18 Data retention</a></li>
+          </ol>
+        </li>
+        <li><a href="#closing">Wrapping up</a></li>
+      </ol>
+    </details>
+
+    <article class="post-body">
+      <p>Engineers who are new to a big company often ask me: “This feature would take two days to write. Why do I need a design doc and a stack of meetings first?”</p>
+      <p>Honestly, I used to think the same thing. Then I stepped on a few landmines: a feature that shipped and nobody used, a cloud bill bigger than the money the feature saved, getting paged in the middle of the night for a system nobody could understand. That's when it clicked. <strong>At a big company, writing the code is usually the easy part. The hard part is working out, before you write it, where things are going to break.</strong></p>
+      <p>This post organizes the questions I ask when designing a system into three stages:</p>
+      <ol>
+        <li><strong>Before you design</strong>: figure out what problem you're actually solving</li>
+        <li><strong>While you design</strong>: make decisions like an owner</li>
+        <li><strong>In the design review</strong>: the questions you'll get asked, and the risks they're really probing for</li>
+      </ol>
+      <p>For every question I'll explain why it gets asked. <strong>You can only answer a question well once you understand what it's really trying to prevent.</strong> Otherwise you're just memorizing a checklist.</p>
+
+      <div class="post-example">
+        <span class="post-example-label">The running example</span>
+        <p>To keep things concrete, I'll use one example from start to finish:</p>
+        <p><strong>A company has 1,000 customer support agents. After every call, each agent spends 3 minutes typing up notes in the CRM. Leadership wants an “automatic call summary” feature: the moment a call ends, the system transcribes the recording, generates a summary, and fills it into the CRM.</strong></p>
+      </div>
+
+      <!-- ===== Part 1 ===== -->
+      <hr />
+      <h2 id="before"><span class="post-eyebrow">PART 1</span>Before you design</h2>
+      <p>The questions that need answers before you start designing anything.</p>
+
+      <h3 id="why">1. Why are we building this feature?</h3>
+      <p>This is the question people skip most often, and it's the most important one. Engineers tend to hear a requirement and jump straight to architecture: “Which model should we use? Do we need Kafka?” But if you don't know who will use it or what problem it solves, you can easily build something technically beautiful that nobody wants.</p>
+      <p>I break it into three smaller questions.</p>
+
+      <h4>Who are the users?</h4>
+      <p>“Support agents” is only the first-layer answer. Dig a little deeper and there are actually three groups:</p>
+      <ul>
+        <li><strong>Support agents</strong>: want to type less, and need the summaries to be accurate</li>
+        <li><strong>Support managers</strong>: when a complaint comes in, want to understand quickly what happened on that call</li>
+        <li><strong>QA staff</strong>: need to spot-check call quality</li>
+      </ul>
+      <p>Each group needs different things and different permissions (an agent shouldn't be able to see other agents' calls), and all of that shapes the design later on.</p>
+
+      <h4>What problem does it solve for them?</h4>
+      <p>On the surface it's “save typing time.” But do the math: 5 calls an hour with 3 minutes saved per call is 15 minutes saved every hour, or 2 hours a day. Across 1,000 agents, that's <strong>2,000 hours of work saved every day</strong>.</p>
+      <p>That number matters. It determines how much the company is willing to spend on this feature, and it will keep coming back when we work out costs.</p>
+
+      <h4>How did users do this before?</h4>
+      <p>This one gets overlooked the most, and it's the one that saves you most often. Until now, agents typed notes into a free-text field in the CRM, and managers investigating a complaint would pull up the recording and listen to it.</p>
+      <p>That tells us something: <strong>the summary has to end up back in the CRM.</strong> Build it as a separate website and agents have to copy and paste between two systems. You've just swapped “typing” for “copy-paste,” and within a month nobody will be using it.</p>
+
+      <div class="post-callout">
+        <div class="post-callout-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></svg>The underlying problem</div>
+        <p>Avoid building a feature that succeeds technically but fails as a product. Users' old habits are the new system's constraints.</p>
+      </div>
+
+      <h3 id="how">2. How will we build it?</h3>
+
+      <h4>Where does the core run? Endpoint, cloud, or local server</h4>
+      <p>The same feature turns out very differently depending on where its core lives:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Where the core runs</th><th>In the call-summary example</th><th>Upside</th><th>Cost</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Endpoint (the agent's PC)</td><td>Every PC runs its own speech recognition model</td><td>Recordings never get uploaded, which is best for privacy</td><td>Company PCs have no GPU and can't run it; updating models on 1,000 machines is a nightmare</td></tr>
+            <tr><td>Cloud</td><td>Recordings are uploaded to the cloud for processing</td><td>Fastest to build; scale by adding machines</td><td>Recordings contain personal data, and security or compliance may not allow it to leave the company</td></tr>
+            <tr><td>Local server (company data center)</td><td>GPU servers in the company's own data center</td><td>Data never leaves the company</td><td>You buy and operate the hardware yourself; scaling waits on procurement</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Customers regularly read out ID numbers and credit card numbers on support calls, so this is usually <strong>not a decision engineers can make alone</strong>. Ask security and legal first. First, not after you've built it.</p>
+
+      <h4>What's the interface? Desktop app, mobile app, or web</h4>
+      <p>Agents keep the CRM open in a browser all day, so the obvious answer is a web plugin inside the CRM.</p>
+      <p>But that depends on where the recordings come from. If the phone system (PBX) already records calls, the backend just fetches the files, and the frontend is a web plugin that shows the summary. If the phone system doesn't record, you need to capture audio from the softphone on the agent's PC, and a browser can't do that. Now you need a desktop app, and a desktop app means dealing with installation, auto-updates, and locked-down company machines.</p>
+      <p>A requirement detail that looks tiny ends up deciding the entire frontend.</p>
+
+      <h4>What's the main tech stack?</h4>
+      <p>The speech recognition and LLM ecosystems are almost entirely Python, so Python makes sense for the workers that process audio. For the API service handling lots of concurrent requests, Go might use fewer resources. And if the frontend is a CRM plugin, you have to follow that CRM platform's development framework. No choice there.</p>
+
+      <div class="post-callout">
+        <div class="post-callout-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></svg>The underlying problem</div>
+        <p>Where the core runs and what the interface is determine how data flows, whether you're compliant, and how expensive the system is to operate. These decisions are hard to reverse later.</p>
+      </div>
+
+      <h3 id="scale">3. How many users? How often? How much data?</h3>
+      <p>You need numbers. “Lots of people use it” is not a scale. “1,000 people, 5 times an hour each, 10MB per request” is.</p>
+      <p>Let's work it out for our example:</p>
+      <div class="post-example">
+        <span class="post-example-label">Assumptions</span>
+        <ul>
+          <li>Users: 1,000 support agents, active only during working hours (8 hours)</li>
+          <li>Frequency: about 5 calls per agent per hour</li>
+          <li>Files: a 10-minute recording is about 10MB</li>
+        </ul>
+      </div>
+      <div class="post-stats">
+        <div class="post-stat"><strong>≈ 1.4 / sec</strong><span>Average requests per second<br/>(5,000 per hour: 1,000 × 5)</span></div>
+        <div class="post-stat"><strong>≈ 110 Mbps</strong><span>Upload bandwidth<br/>(1.4 × 10MB ≈ 14 MB/s)</span></div>
+        <div class="post-stat"><strong>400 GB</strong><span>Data per day<br/>(5,000 × 8 hours × 10MB)</span></div>
+        <div class="post-stat"><strong>8.8 TB</strong><span>Data per month<br/>(22 working days)</span></div>
+      </div>
+      <p>Here's the interesting part: <strong>1.4 requests per second is small enough for a single machine. But 8.8TB of recordings a month adds up to more than 100TB in a year.</strong></p>
+      <p>The challenge in this system isn't QPS at all. It's bandwidth, storage cost, and processing time. Without running the numbers, it's easy to put effort in the wrong place, like spending two weeks tuning API performance.</p>
+      <p>“Working hours only” is important information too:</p>
+      <ul>
+        <li>On nights and weekends you can scale down to the minimum and save money</li>
+        <li>But everyone logs in at 9 a.m., so watch out for cold starts</li>
+        <li>After monthly bills go out, call volume can multiply, so estimate that peak separately</li>
+      </ul>
+
+      <div class="post-callout">
+        <div class="post-callout-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></svg>The underlying problem</div>
+        <p>Scale determines architecture. A system for 1,000 people and one for a million are completely different designs. Any discussion without numbers is just talk.</p>
+      </div>
+
+      <h3 id="limits">4. What are the system's constraints?</h3>
+      <p>Every technology has built-in bottlenecks. Better to know them before you design than to hit the wall after launch.</p>
+
+      <h4>The CAP theorem</h4>
+      <p>A distributed system can only guarantee two of consistency, availability, and partition tolerance. In practice, networks do fail and partitions do happen, so the real choice is: <strong>when the network breaks, do you want “the data is always correct” or “the service always responds”?</strong></p>
+      <ul>
+        <li>Billing and inventory: better to be briefly unavailable than to get the numbers wrong, so choose C</li>
+        <li>Like counts and view counts: a few seconds of delay is fine, but the page can't go down, so choose A</li>
+      </ul>
+
+      <h4>Message size and timeout limits</h4>
+      <p>This one is critical for our example, because every recording is 10MB:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Component</th><th>Typical limit</th><th>Impact on a 10MB recording</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>AWS API Gateway (REST)</td><td>10MB payload limit; 29-second integration timeout by default</td><td>File size sits right at the edge, and transcribing a 10-minute recording will definitely take longer than 29 seconds</td></tr>
+            <tr><td>AWS Lambda (synchronous invoke)</td><td>6MB request/response payload limit</td><td>Doesn't fit at all</td></tr>
+            <tr><td>Kafka</td><td>About 1MB default maximum message size</td><td>Doesn't fit</td></tr>
+            <tr><td>DynamoDB</td><td>400KB maximum item size</td><td>A longer transcript may exceed it</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Once you know these limits, the design mostly falls out on its own:</p>
+      <ul>
+        <li><strong>Don't send files through the API.</strong> Use a pre-signed URL so the client uploads directly to S3</li>
+        <li><strong>Put only the file path on the queue</strong>, not the file itself (this is the claim-check pattern)</li>
+        <li>Transcription will take longer than 29 seconds, so processing has to be <strong>asynchronous</strong></li>
+      </ul>
+
+      <div class="post-callout">
+        <div class="post-callout-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></svg>The underlying problem</div>
+        <p>Avoid discovering halfway through the design, or after launch, that some component simply can't handle the load and the whole architecture has to be torn down.</p>
+      </div>
+
+      <h3 id="cost">5. What does each user cost?</h3>
+      <p><strong>What's the market price? What's our target?</strong> You need this even for an internal tool, because leadership will compare it with just buying an off-the-shelf SaaS product.</p>
+      <div class="post-example">
+        <span class="post-example-label">Assumptions (all numbers are illustrative)</span>
+        <ul>
+          <li>Similar call-summary services on the market cost about $30 per user per month</li>
+          <li>Speech recognition plus LLM summarization costs us about $0.02 per call</li>
+          <li>Each agent handles about 880 calls a month (5 calls × 8 hours × 22 days)</li>
+        </ul>
+      </div>
+<pre><code>Compute: 880 × $0.02 = $17.60 per user per month
+Storage: each user adds 8.8GB a month; small at first, but it piles up if nothing is deleted
+Cost per user per month ≈ $18 and up, and rising every month</code></pre>
+      <p>Compared with $30 there seems to be room. But add operations staff, idle machines, and ever-growing storage, and you may end up paying about the same as you would to buy. At that point the design direction changes:</p>
+      <ul>
+        <li>Could we <strong>summarize only calls longer than 2 minutes</strong>? (Short calls are usually transfers or wrong numbers)</li>
+        <li>Could a <strong>smaller model</strong> classify calls first, and send only the complex ones to the large model?</li>
+        <li>Could recordings be <strong>deleted after 30 days</strong>, keeping only the text summary?</li>
+      </ul>
+      <p>If this were a product sold to external customers: SaaS companies commonly target 70–80% gross margins, which means the cost of serving each user should stay under roughly 20–30% of the price if it's going to fund the team.</p>
+
+      <div class="post-callout">
+        <div class="post-callout-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></svg>The underlying problem</div>
+        <p>Being able to build a feature doesn't mean you should. Cost decides whether the feature can survive, and it feeds back into the architecture: whether to self-host, whether to cache, how long to keep data.</p>
+      </div>
+
+      <h3 id="effort">6. How many people and how much time to reach production quality?</h3>
+      <p>When the demo works, you're about halfway done.</p>
+      <p>Production still needs monitoring and alerting, access control, a security review, load testing, error handling, an on-call runbook, documentation… These often take the other half of the time or more, and they're the things most often left out of the schedule.</p>
+      <p>When estimating, I split the work into two kinds.</p>
+
+      <h4>Obvious gaps you'll have to build yourself</h4>
+      <p>For example, support calls often involve heavy accents, regional dialects, or people switching languages mid-sentence, and off-the-shelf speech recognition may not be accurate enough. Work like this, where no ready-made solution exists, is <strong>research work</strong>: it might take two weeks, or you might still be tuning it three months later.</p>
+      <p>Pull this out and estimate it separately, and be upfront about the uncertainty. Don't lump it in with regular development work.</p>
+
+      <h4>Stopgaps that fill the hole now but need revisiting</h4>
+      <ul>
+        <li>v1 handles only the primary language, and low-confidence transcripts get flagged “needs human review”</li>
+        <li>v1 <strong>doesn't write summaries back to the CRM automatically</strong>: an agent clicks “Confirm” first, so the AI can't write bad data</li>
+        <li>v1 processes in batches every 5 minutes, and switches to real time later</li>
+      </ul>
+      <p>Compromises are fine, but <strong>write them into the doc, file the tickets, and agree on when you'll pay them back</strong>. A “temporary” fix nobody wrote down always becomes permanent.</p>
+
+      <div class="post-callout">
+        <div class="post-callout-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></svg>The underlying problem</div>
+        <p>Give managers realistic expectations about the timeline, and make sure everyone knows what technical debt you're taking on.</p>
+      </div>
+
+      <h3 id="compat">7. What existing systems do we need to fit with?</h3>
+      <p>A big company isn't a blank slate. Whatever you design has to fit into an environment that may have been running for more than a decade. The company's preferred languages, systems, software, and vendors are all part of the design's starting point.</p>
+
+      <h4>The company's preferred languages</h4>
+      <p>If everyone at the company is a Python or Go expert, think twice before choosing Elixir, even if it seems like a great fit. The reasons are practical:</p>
+      <ul>
+        <li>Nobody can read it in code review, so review becomes a formality</li>
+        <li>If the system breaks while you're on vacation, nobody can debug it</li>
+        <li>When it's time to hand it off, nobody wants to take it</li>
+      </ul>
+      <p>Pick languages people already know, and when something goes wrong, someone can quickly review and help.</p>
+
+      <h4>Existing platforms and data formats</h4>
+      <p>Say the company's data platform runs on Starburst and prefers the Iceberg format. Then historical call summaries should land as Iceberg tables, so the data team can analyze them right away without writing a separate ETL pipeline.</p>
+
+      <h4>Other common compatibility questions</h4>
+      <ul>
+        <li><strong>Login</strong>: the company already has SSO (Azure AD / Okta), so don't build your own username-and-password system</li>
+        <li><strong>Monitoring and logging</strong>: if the company has standardized on Datadog or ELK, plug into it instead of running your own</li>
+        <li><strong>Vendors</strong>: if the company has an enterprise discount with one cloud provider, switching may mean months of procurement and legal review</li>
+        <li><strong>CRM</strong>: to write back to the CRM, check first whether its API has rate limits</li>
+      </ul>
+
+      <div class="post-callout">
+        <div class="post-callout-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></svg>The underlying problem</div>
+        <p>Lower the cost of operations and communication. A system isn't done when the code is written; someone has to look after it for years. Choose technology the company can actually sustain.</p>
+      </div>
+
+      <!-- ===== Part 2 ===== -->
+      <hr />
+      <h2 id="during"><span class="post-eyebrow">PART 2</span>While you design</h2>
+
+      <h3 id="owner">Make decisions like an owner</h3>
+      <p>The biggest mindset shift when designing a system, I think, is this: <strong>imagine the feature is your own company. The cloud bill arrives at your house every month, and when it breaks in the middle of the night, your phone is the one that rings.</strong></p>
+      <p>Seen that way, you naturally start caring about the following.</p>
+
+      <h4>1. Scalability: when volume grows, is adding machines enough?</h4>
+      <p>Next year the company acquires another support center, and 1,000 agents become 3,000. In a good design, you go from 5 workers to 15 and you're done. In a bad design, the database can't cope and you need two days of downtime for a data migration.</p>
+
+      <h4>2. Extensibility: do new features mean a rewrite?</h4>
+      <p>Scalability is about volume; extensibility is about features. Three months after launch, a manager will inevitably ask: “Since we have transcripts anyway, can we add sentiment analysis? Can it categorize complaints automatically?”</p>
+      <p>If transcription emits a “transcript ready” event when it finishes, a new feature just subscribes to that event. If transcription, summarization, and the CRM write-back are hardwired into one function, every new feature touches the core flow, and every change risks breaking it.</p>
+
+      <h4>3. Acceptable cost</h4>
+      <p>Keep pulling out that per-user cost while you design. For every component you add (a cache, a queue, a read replica), ask yourself: is what it gives us worth what it costs?</p>
+
+      <h4>4. Acceptable maintenance burden</h4>
+      <p>Running your own Kafka + Kubernetes + Cassandra sounds impressive, but with a three-person team, just upgrading versions and handling node failures will eat all of the team's time.</p>
+      <p>Very often, <strong>paying a bit more for a managed cloud service so the team can sleep at night is an excellent trade.</strong></p>
+
+      <h4>5. Give reviewers a choice</h4>
+      <p>A lot of people miss this one: <strong>design at least two options and compare their trade-offs.</strong></p>
+      <p>Why? If you present a single option, reviewers can only say “yes” or “no,” and they'll be wondering: “Did you even consider anything else?” The rest of the meeting turns into everyone pitching the design in their own head, and the discussion goes nowhere.</p>
+      <p>Put two options side by side and the discussion focuses on which trade-off we actually want:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th></th><th>Option A: managed cloud services</th><th>Option B: self-hosted models in the company data center</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Time to launch</td><td>About 2 months</td><td>About 5 months (including GPU procurement)</td></tr>
+            <tr><td>Monthly cost</td><td>Grows linearly with usage</td><td>High upfront hardware cost; cheaper at high volume</td></tr>
+            <tr><td>Privacy compliance</td><td>Security has to approve sending recordings to the cloud</td><td>Data never leaves the company</td></tr>
+            <tr><td>Operational burden</td><td>Low</td><td>High; someone has to look after GPUs and models</td></tr>
+            <tr><td>Scaling flexibility</td><td>High; add capacity anytime</td><td>Low; wait on procurement</td></tr>
+            <tr><td>Dialect recognition</td><td>Limited to what the vendor supports</td><td>You can fine-tune it yourself</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Finish with which option you recommend, and why. It's also worth one line on why each rejected option lost: when someone asks six months later “why didn't we go with B?”, the doc has the answer.</p>
+      <p><em>(The design review examples that follow assume we recommended Option A: security approved sending recordings to the cloud, so we launch quickly on managed services.)</em></p>
+
+      <h3 id="poc">A PoC proves the path works; it isn't a system</h3>
+      <p>This is a very common trap.</p>
+      <p><strong>A PoC (proof of concept)</strong> answers one specific question: “Does this path work?” For example:</p>
+      <p class="post-quote">Take 50 real support recordings (including dialects, background noise, and angry customers shouting), run speech recognition and summarization on them, and see whether accuracy reaches 85%.</p>
+      <p>This PoC needs no login, no database, and no nice UI. A script and a results report are enough, and you should have an answer within one or two weeks. Throwing all the code away afterwards is completely fine.</p>
+      <p>The classic failure goes like this: the PoC slowly grows a UI and a database, it gets demoed to leadership, and leadership says: “Isn't this done? Let's launch next month!” And something with no access control, no monitoring, and no error handling ends up in production.</p>
+      <p><strong>A prototype</strong> comes after the design is decided. It's built on the chosen architecture and given to a small group of real users, and it validates the workflow and the experience: do agents actually read the summaries? Where in the CRM is the summary most convenient?</p>
+      <p>The order is:</p>
+      <div class="post-flow" aria-label="PoC to prove feasibility, then design and review, then a prototype to validate the experience, then building for real">
+        <span class="post-flow-step is-accent">PoC: prove feasibility</span>
+        <span class="post-flow-arrow" aria-hidden="true">→</span>
+        <span class="post-flow-step">Design and review</span>
+        <span class="post-flow-arrow" aria-hidden="true">→</span>
+        <span class="post-flow-step is-accent">Prototype: validate the experience</span>
+        <span class="post-flow-arrow" aria-hidden="true">→</span>
+        <span class="post-flow-step">Build for real</span>
+      </div>
+
+      <div class="post-callout">
+        <div class="post-callout-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></svg>The underlying problem</div>
+        <p>Eliminate the biggest uncertainties at the lowest cost, and avoid a half-built system accidentally going live.</p>
+      </div>
+
+      <!-- ===== Part 3 ===== -->
+      <hr />
+      <h2 id="review"><span class="post-eyebrow">PART 3</span>In the design review</h2>
+      <p>A design review isn't there to make your life hard. It's a group of people who've stepped on these landmines before, helping you find the risks in your system.</p>
+      <p>And the goal is <strong>not zero risk</strong>. A zero-risk system doesn't exist, and if it did you couldn't afford it. The real goal is to <strong>turn “risks we don't know about” into “risks we know about and choose to accept,” and be clear about what they cost.</strong></p>
+      <p>For example:</p>
+      <ul>
+        <li>“A manager's stats report may lag by up to a minute”: acceptable, the cost is small</li>
+        <li>“Agent A might be able to see Agent B's calls”: not acceptable, must be fixed</li>
+      </ul>
+      <p>Below are the questions that come up most often in design reviews. For each one I've added what it's really probing for. Think that through first, and your answers will have a much clearer direction.</p>
+
+      <!-- Q1 -->
+      <h3 id="q1" class="post-q"><span class="post-q-num">Q1</span><span>What problem does the system solve? What features does it provide? How big is the expected scale?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>Whether everyone is talking about the same thing.</p>
+      <p>This is usually the first question. If you can't explain it in a sentence or two, the rest of the discussion loses focus. A good answer has users, value, and numbers:</p>
+      <p class="post-quote">“Give 1,000 support agents a summary within 1 minute of every call, saving 3 minutes of typing per call. Peak volume is about 5,000 calls an hour, or about 8.8TB of recordings a month.”</p>
+      <p>It's also worth stating clearly <strong>what this version won't do</strong> (non-goals), like “no live captions, no sentiment analysis.” Otherwise, halfway through the meeting someone will say: “While we're at it, adding X can't be that hard, right?”</p>
+
+      <!-- Q2 -->
+      <h3 id="q2" class="post-q"><span class="post-q-num">Q2</span><span>What technical options are there? What are the pros and cons of each?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>Whether you actually compared them, or picked an answer first and found reasons later.</p>
+      <p>This is the “at least two options” comparison table from earlier. Reviewers pay close attention to whether the comparison is fair: if the recommended option lists nothing but strengths and the other lists nothing but weaknesses, people will quickly see it's a straw man.</p>
+      <p>Being honest about your recommended option's weaknesses actually makes it more convincing.</p>
+
+      <!-- Q3 -->
+      <h3 id="q3" class="post-q"><span class="post-q-num">Q3</span><span>How are tasks dispatched? Sync or async? Do you need a queue? How do you manage queue length and timeouts?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>Whether the system collapses at peak, how long users wait, and whether tasks get lost or run twice.</p>
+      <p>Transcribing a 10-minute recording might take 30–60 seconds, and as mentioned earlier, API Gateway times out at 29 seconds by default, so synchronous processing won't work. The flow becomes:</p>
+      <div class="post-flow" aria-label="Asynchronous processing flow">
+        <span class="post-flow-step">Agent hangs up</span>
+        <span class="post-flow-arrow" aria-hidden="true">→</span>
+        <span class="post-flow-step">Recording uploaded to S3</span>
+        <span class="post-flow-arrow" aria-hidden="true">→</span>
+        <span class="post-flow-step is-accent">Task enters the queue</span>
+        <span class="post-flow-arrow" aria-hidden="true">→</span>
+        <span class="post-flow-step is-accent">Worker transcribes and summarizes</span>
+        <span class="post-flow-arrow" aria-hidden="true">→</span>
+        <span class="post-flow-step">Written back to the CRM</span>
+        <span class="post-flow-arrow" aria-hidden="true">→</span>
+        <span class="post-flow-step">Agent's screen updates</span>
+      </div>
+      <p>Once there's a queue, the follow-up questions always come:</p>
+      <ul>
+        <li><strong>Queue length</strong>: call volume triples at the start of the month and 20,000 tasks pile up. Now what? Set alerts (e.g., “the oldest task has been waiting more than 5 minutes”), and decide ahead of time whether to degrade when the backlog gets too large, for example by transcribing first and filling in summaries later.</li>
+        <li><strong>Timeouts</strong>: the queue's visibility timeout (how long a task that was picked up but not finished waits before going back on the queue) <strong>must be longer than the longest processing time.</strong> Set it to 30 seconds when processing takes 60, and a second worker picks up the same task, so the same call ends up with two summaries in the CRM. This really is a very common bug.</li>
+        <li><strong>Tasks that keep failing</strong>: after 3 failed retries, send them to a dead-letter queue (DLQ) instead of retrying forever and clogging the queue, and alert someone to investigate.</li>
+      </ul>
+
+      <!-- Q4 -->
+      <h3 id="q4" class="post-q"><span class="post-q-num">Q4</span><span>Is the core workload stateless or stateful? How is user state recorded, kept, and restored? Do you need sticky sessions?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>Whether machines can be added and removed freely, and whether users lose data when a machine dies.</p>
+      <p><strong>Stateless</strong> means any machine can handle any request: if a machine dies you replace it, and to scale you add machines. <strong>Stateful</strong> means some data lives only in one machine's memory, and when that machine dies, the data goes with it.</p>
+      <p>For example: if a worker keeps track of how far it has gotten into a recording in memory, and autoscaling kills that machine while scaling in, the call starts over from scratch. The right approach is to write progress to the database or S3, so the worker itself holds no state.</p>
+      <p>The trickier part is <strong>telling the agent “your summary is ready.”</strong> If you push it over a WebSocket, the connection itself is tied to one machine, which makes it inherently stateful. There are two common approaches:</p>
+      <ul>
+        <li><strong>Sticky sessions</strong>: the load balancer uses a cookie to pin each user to the same machine. Simple, but when that machine dies everyone on it disconnects at once, and scaling in means waiting for connections to drain before you can shut a machine down.</li>
+        <li><strong>Separate connections from state</strong>: when a worker finishes, it publishes a message to pub/sub (e.g., Redis). Every connection node receives it, and whichever node holds that user's connection pushes it out. If any node dies, the client just reconnects to another one.</li>
+      </ul>
+      <p>As for <strong>restoring</strong>: when an agent reconnects, the frontend looks up the latest state in the database by <code>call_id</code>, rather than relying on what the previous connection remembered.</p>
+
+      <!-- Q5 -->
+      <h3 id="q5" class="post-q"><span class="post-q-num">Q5</span><span>As users and data grow, how does the system scale? Stateless horizontal scaling, or sharding? What metrics trigger scaling?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>Whether growth means “add machines” or “redesign.”</p>
+      <p>There are two kinds of growth, and they need to be looked at separately.</p>
+
+      <h4>More users (more requests): stateless horizontal scaling</h4>
+      <p>Going from 1,000 agents to 3,000: as long as the API and workers are stateless, adding machines solves it.</p>
+
+      <h4>More data (bigger tables): partitioning, hot/cold separation, sharding</h4>
+      <p>A year later the database holds tens of millions of call records, and a manager's query for “every complaint in the past year” keeps getting slower. Adding API machines won't help; the bottleneck is the database. Consider these, in order:</p>
+      <ol>
+        <li>Partition by month, so queries only scan the months they need</li>
+        <li>Move cold data older than a year to Iceberg and query it with Starburst (conveniently, the company's existing platform)</li>
+        <li>Consider sharding only when write volume truly can't be handled any other way</li>
+      </ol>
+      <p>The most important thing about sharding is <strong>how you choose the shard key.</strong> Use the date as the shard key, and all of today's data lands on one shard: that shard is always the hottest while the others sit idle, which is as good as not sharding at all. Support center ID or agent ID spreads the load much more evenly. A bad shard key is nearly impossible to change later, so reviewers usually dig into this in detail.</p>
+
+      <h4>Metrics that trigger scaling</h4>
+      <p>Many people instinctively use CPU, but in our example that's wrong. Workers spend most of their time waiting on the external speech recognition API (they're I/O bound), so CPU might sit at 20% while 2,000 tasks pile up in the queue. With CPU as the trigger, you'd never scale out.</p>
+      <p>Better metrics:</p>
+      <ul>
+        <li>Queue depth ÷ number of workers (the average backlog per worker)</li>
+        <li>Wait time of the oldest task</li>
+        <li>API p95 latency</li>
+      </ul>
+
+      <!-- Q6 -->
+      <h3 id="q6" class="post-q"><span class="post-q-num">Q6</span><span>Does the system need a cache? What TTL? How do you avoid inconsistent data?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>A cache trades consistency for speed. Do you know what you gave up?</p>
+      <p>First: <strong>not every system needs a cache.</strong> An internal system for 1,000 people may be perfectly fine hitting the database directly. Every cache layer is one more source of inconsistent data. Measure first, and add one only once you've confirmed you need it.</p>
+      <p>If you do need one, decide based on the nature of the data:</p>
+      <ul>
+        <li><strong>A manager's “today's call stats”</strong>: computing it scans a lot of data every time, so caching it for 60 seconds is totally fine; nobody cares if it's a minute old</li>
+        <li><strong>Call summary content</strong>: an agent just edited it, but the screen still shows the old version, so they assume it didn't save, edit it again, or even file a bug</li>
+      </ul>
+      <p>For the latter, <strong>clear the cache on write</strong> (delete the matching cache key right after updating the database), and treat the TTL as a last line of defense.</p>
+      <p>There's another common trap: a <strong>cache avalanche</strong>. If lots of keys are written at the same time with the same TTL (say, a batch load at 9 a.m. with a one-hour TTL), every entry expires at exactly 10:00 and all that traffic lands on the database at once. The fix is to add a little randomness (jitter) to the TTL, e.g., 55–65 minutes, so expirations are spread out.</p>
+
+      <!-- Q7 -->
+      <h3 id="q7" class="post-q"><span class="post-q-num">Q7</span><span>How is the database designed? CAP trade-offs? Read/write splitting, sharding, backup and restore, Multi-AZ, I/O capacity?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>The database is the hardest part of a system to change later. Get it wrong early and it costs the most.</p>
+
+      <h4>CAP trade-offs</h4>
+      <p>Different data in the same system can make different choices. A rule like “each call has exactly one official summary” needs strong consistency; the stats report can live with eventual consistency.</p>
+
+      <h4>Read/write splitting</h4>
+      <p>Managers' big reports are resource-hungry. Run them against a read replica so they don't slow down agents' writes. But replicas lag behind (replication lag): an agent saves a summary, the screen immediately reads it back from the replica, and they think “wait, it didn't save?” So <strong>reads of data a user just wrote should go to the primary.</strong></p>
+
+      <h4>Backup and restore</h4>
+      <p>“We have backups” is not the same as “we can restore.” Reviewers may well ask: have you actually done a restore? How many hours does restoring 2TB take? What does the system do in the meantime?</p>
+      <p>With backups you've never rehearsed, you usually find out during an incident that a table was never included, or that the restore takes 12 hours.</p>
+
+      <h4>Multi-AZ</h4>
+      <p>When one data center (an Availability Zone) loses power or network, can the database fail over to another one automatically? The cost roughly doubles, so weigh it against what an hour of downtime would cost you.</p>
+
+      <h4>I/O capacity</h4>
+      <p>Cloud disks have IOPS limits (AWS gp3, for example, has a 3,000 IOPS baseline). A common story: a nightly batch report maxes out IOPS, online writes slow down with it, and it looks like the database is down, but the CPU is nearly idle. If you're not watching I/O metrics, this takes a long time to track down.</p>
+
+      <!-- Q8 -->
+      <h3 id="q8" class="post-q"><span class="post-q-num">Q8</span><span>How does data sync work? How do you control concurrent access to data?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>When two people edit the same record at once, whether someone's changes silently disappear.</p>
+      <div class="post-example">
+        <span class="post-example-label">Scenario</span>
+        <p>An agent is editing a call's summary while a manager adds a note to the same record. The manager saves first, the agent saves second, and the manager's note is overwritten without anyone noticing. This is called a <strong>lost update</strong>.</p>
+      </div>
+      <p>Common fixes:</p>
+      <ul>
+        <li><strong>Optimistic locking</strong>: add a <code>version</code> column to each record and update with the condition <code>WHERE id = ? AND version = ?</code>. If someone else has already changed the version, the update fails and the user sees “this record was modified by someone else, please refresh.”</li>
+        <li><strong>Split the data</strong>: the manager's note doesn't need to live in the same record as the summary. Move it to its own table and the conflict disappears.</li>
+      </ul>
+      <p><strong>Syncing across systems</strong> is a separate problem: the summary has to be written back to the CRM, but what if the CRM's API happens to be down?</p>
+      <ul>
+        <li>First decide <strong>what the source of truth is</strong>: our database, or the CRM?</li>
+        <li>Failed writes need to be retried, and <strong>retries must be idempotent.</strong> Use <code>call_id</code> as the idempotency key, and even after ten retries the CRM will only have one summary.</li>
+      </ul>
+
+      <!-- Q9 -->
+      <h3 id="q9" class="post-q"><span class="post-q-num">Q9</span><span>How are logs collected? What errors can you analyze? Can you query unusual system events? Are user actions kept in an audit log?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>When something goes wrong, whether you can find out what happened.</p>
+      <p>Scenario: an agent reports “my call yesterday afternoon has no summary.” If your logs are just lines of text with no IDs tying them together, you're looking for a needle in millions of log lines.</p>
+      <p>A few basic principles:</p>
+      <ul>
+        <li><strong>Structured logs</strong> (JSON), so they're easy to search and aggregate</li>
+        <li><strong>One trace ID across the whole flow</strong>: upload → queue → worker → CRM, so a single ID shows the entire path</li>
+        <li><strong>Categorize errors</strong>: speech recognition failures, LLM timeouts, and CRM write failures, each counted separately, so you know what to fix first</li>
+        <li><strong>Don't log personal data</strong>: once ID numbers or phone numbers get into your logs, the logging system itself becomes a source of data leaks</li>
+      </ul>
+      <p>An <strong>audit log</strong> is a different thing. Call recordings contain customers' personal data, and during a security audit or a breach investigation, someone will definitely ask: “Who listened to which recording, who downloaded which summary, and when?” These logs have to be stored separately from ordinary logs and be tamper-proof, with retention set by company policy or regulation.</p>
+
+      <!-- Q10 -->
+      <h3 id="q10" class="post-q"><span class="post-q-num">Q10</span><span>What metrics should the system monitor? CPU, memory, disk, network, request volume, cache hit rate, connection pool size, and latency?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>Whether you find out something's wrong before your users do.</p>
+      <p>I split metrics into two layers:</p>
+      <ul>
+        <li><strong>Resource metrics</strong> (CPU, memory, disk, network): tell you whether the <em>machines</em> are healthy</li>
+        <li><strong>Service metrics</strong> (request volume, error rate, latency, queue depth, cache hit rate, connection pool utilization): tell you whether <em>users</em> are having a good experience</li>
+      </ul>
+      <p>A few things that really happen, and why these metrics matter:</p>
+      <ul>
+        <li><strong>Connection pools</strong>: each worker opens 20 database connections. At peak, autoscaling takes workers from 10 to 50, that's 1,000 connections, and the database's limit is exceeded. <strong>Scaling out is what takes the system down.</strong> Without monitoring connection pools, you'd have no idea why adding machines broke things.</li>
+        <li><strong>Look at p99 latency, not just the average</strong>: an 800ms average looks great, but a p99 of 15 seconds means 1 call in every 100 leaves an agent waiting a long time. Averages hide problems.</li>
+        <li><strong>Cache hit rate</strong>: a drop from 90% to 20% is usually an early warning that the database is about to be overwhelmed.</li>
+        <li><strong>Disk</strong>: logs fill the disk, the service can't write anything, and it falls over. This one is a classic that almost everyone has hit.</li>
+      </ul>
+
+      <!-- Q11 -->
+      <h3 id="q11" class="post-q"><span class="post-q-num">Q11</span><span>How do authentication and authorization work? How do you stop users from accessing other people's data? What login methods are supported? How are accounts created?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>Security holes, and the most common, most serious kind.</p>
+      <p>First, keep the two straight: <strong>authentication</strong> is “who you are,” and <strong>authorization</strong> is “what you're allowed to do.”</p>
+      <p>The most common vulnerability here is called <strong>IDOR</strong> (insecure direct object reference): an agent opens <code>/calls/12345/summary</code> to view their own call, gets curious and changes the URL to <code>12346</code>, and sees someone else's call.</p>
+      <p>Hiding the button in the frontend does nothing. <strong>Every API has to check on the backend whether this person is allowed to see this record</strong>: for example, it's their own call, or they're a manager and it's a call from someone on their team.</p>
+      <p><strong>Login</strong>: for internal systems, integrate directly with the company's SSO (SAML / OIDC with Azure AD or Okta). The biggest problem with rolling your own usernames and passwords: when an employee leaves, their AD account gets disabled, but their account in your system is still there, and they can still log in.</p>
+      <p><strong>Account creation</strong>: internal systems usually don't allow self sign-up. Accounts sync from AD groups instead (e.g., via SCIM), so permissions follow HR changes automatically.</p>
+
+      <!-- Q12 -->
+      <h3 id="q12" class="post-q"><span class="post-q-num">Q12</span><span>What does the system cost? How much traffic can it handle? How much can each service unit support?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>Whether you have measured numbers for the system's capacity, or just guesses.</p>
+      <p>A “service unit” is how much a single worker or pod can handle. <strong>Measure it with load testing.</strong> Once you have that number, you can actually calculate scaling and cost:</p>
+<pre><code>Load test: one worker completes 12 ten-minute recordings per minute
+Normal peak: 5,000 calls/hour ≈ 83 calls/minute → 7 workers
+Headroom (survive 2 failures) → 9 workers
+3× traffic at the start of the month: ~250 calls/minute → 21+ workers</code></pre>
+      <p>Worker count times unit price is your monthly cost; divide by the number of users and you're back to “what does each user cost?”</p>
+      <p>Also be clear about <strong>what happens beyond capacity</strong>: does the queue just slow down? Do you rate-limit and reject requests? Or degrade to transcription only?</p>
+
+      <!-- Q13 -->
+      <h3 id="q13" class="post-q"><span class="post-q-num">Q13</span><span>What's the failover mechanism for each component? How long does recovery take?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>Every component will fail eventually. When it does, what do users see?</p>
+      <p>Two commonly used metrics:</p>
+      <ul>
+        <li><strong>RTO</strong> (Recovery Time Objective): how quickly service has to be restored</li>
+        <li><strong>RPO</strong> (Recovery Point Objective): the most data loss you can accept, measured in time</li>
+      </ul>
+      <p>List every component and answer for each one:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Component</th><th>Failure scenario</th><th>Failover</th><th>Recovery time</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>API server</td><td>One instance dies</td><td>Multiple instances behind a load balancer; the dead one is removed automatically</td><td>Barely noticeable</td></tr>
+            <tr><td>Worker</td><td>Dies mid-task</td><td>The task times out and returns to the queue for another worker to pick up</td><td>That call is delayed a few minutes</td></tr>
+            <tr><td>Database</td><td>Primary dies</td><td>Multi-AZ automatic failover</td><td>About 1–2 minutes; writes have to be retryable in the meantime</td></tr>
+            <tr><td>Recordings (S3)</td><td>A single data center fails</td><td>S3 stores data across AZs with extremely high durability</td><td>RPO must be 0; recordings can never be lost</td></tr>
+            <tr><td>External speech recognition / LLM API</td><td>Vendor outage</td><td>Tasks wait in the queue, or switch to a backup vendor</td><td>Up to the vendor; agents type notes manually in the meantime</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>That last row is the one people forget most. <strong>When an external dependency breaks, you can't fix it at all</strong>; all you can do is plan a fallback ahead of time. Also, a broken summary can be regenerated, but a lost recording is gone for good, so their RPO requirements are completely different.</p>
+
+      <!-- Q14 -->
+      <h3 id="q14" class="post-q"><span class="post-q-num">Q14</span><span>What's the error-handling strategy? Should input be validated or limited? Should output be paginated? Should failures be retried, and how many times, how far apart?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>Never trust input, and always assume calls will fail.</p>
+
+      <h4>Input validation</h4>
+      <div class="post-example">
+        <span class="post-example-label">Scenario</span>
+        <p>An agent forgets to hang up and records all night, producing a 3GB recording. A worker runs out of memory (OOM) loading it and crashes, the task returns to the queue, another worker picks it up and crashes too… one after another, until the whole queue is stuck. A message that keeps crashing whatever processes it is called a <strong>poison message</strong>.</p>
+      </div>
+      <p>So input needs limits:</p>
+      <ul>
+        <li>Maximum file size (e.g., 50MB)</li>
+        <li>Maximum recording length (e.g., 2 hours; anything longer goes through a special path)</li>
+        <li>File format: check the actual file header, not just the extension</li>
+      </ul>
+
+      <h4>Output pagination</h4>
+      <p>A manager queries “all calls this month,” the API tries to return 100,000 records at once, the API times out, and the browser freezes. List APIs must be paginated; with large datasets, use cursor-based pagination rather than <code>OFFSET</code> (which gets slower the further you page).</p>
+
+      <h4>Retry strategy</h4>
+      <ul>
+        <li><strong>Only retry errors that might succeed</strong>: timeouts, <code>429 Too Many Requests</code>, and <code>503</code> are worth retrying; a <code>400</code> bad request won't succeed if you retry it a hundred times</li>
+        <li><strong>Exponential backoff + jitter</strong>: wait 1 second, 2 seconds, 4 seconds… plus some randomness, capped at, say, 5 attempts</li>
+        <li><strong>Avoid retry storms</strong>: when an external API slows down and every client retries immediately at the same moment, traffic instantly multiplies and a service that was merely slow gets knocked over completely. Besides jitter, add a circuit breaker (stop calling for a while when the failure rate gets too high)</li>
+        <li><strong>Retried operations must be idempotent</strong>: as covered earlier, retries must never cause duplicate writes</li>
+      </ul>
+
+      <!-- Q15 -->
+      <h3 id="q15" class="post-q"><span class="post-q-num">Q15</span><span>Which platforms are supported? Do you need responsive design?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>Every extra platform means more development, testing, and maintenance. Are you sure you need it?</p>
+      <ul>
+        <li>Agents all use company-issued Windows PCs with Chrome: a web app is enough</li>
+        <li>Managers want to check reports on their phones: responsive web is enough, no native app needed</li>
+        <li>But if the requirement becomes “field staff record audio on their phones at customer sites”: now you're handling offline mode, background uploads, and iOS background-execution limits, which is a completely different level of work</li>
+      </ul>
+      <p><strong>Explicitly listing unsupported platforms</strong> matters too, for example “uploading recordings from mobile is not supported,” so it doesn't get reported as a bug after launch.</p>
+
+      <!-- Q16 -->
+      <h3 id="q16" class="post-q"><span class="post-q-num">Q16</span><span>What are the system's limits? Under what conditions are they hit?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>Whether you know where your own system's limits are, and what happens when you hit them.</p>
+      <p>The “constraints” we asked about before designing were limits of external technology. Here the question is about <strong>your own system's limits.</strong> For each one, spell out what triggers it and how the system behaves when it does:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Limit</th><th>When it's hit</th><th>Behavior when hit</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>50MB maximum file size (about 50 minutes)</td><td>Tech support calls often run over an hour</td><td>Rejected, with a prompt to take notes manually</td></tr>
+            <tr><td>Throughput cap of about 250 calls per minute</td><td>After monthly bills go out</td><td>Tasks queue up; summaries arrive late</td></tr>
+            <tr><td>LLM API tokens-per-minute limit</td><td>Peak hours</td><td>Back off and retry after a 429</td></tr>
+            <tr><td>Primary language only</td><td>Calls in a dialect or another language</td><td>Flagged “low confidence, needs human review”</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Write these down, and a middle-of-the-night incident becomes “known behavior, documented in the design doc,” and support managers know in advance how to respond.</p>
+
+      <!-- Q17 -->
+      <h3 id="q17" class="post-q"><span class="post-q-num">Q17</span><span>How do you troubleshoot problems? What does the system record about users and system state?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>Whether debuggability was designed in from the start, or logging gets bolted on after something breaks.</p>
+      <p>Let's walk through a real troubleshooting session to see what information you need.</p>
+      <div class="post-example">
+        <span class="post-example-label">Mei from support reports: “The summary for my 10:32 call is empty.”</span>
+        <ol>
+          <li>Use Mei's user ID and the time to find that call's <code>call_id</code></li>
+          <li>Use the <code>call_id</code> to find the trace: the upload succeeded, the queue received it, transcription completed, but the transcript is empty</li>
+          <li>Check the recording's metadata: the file size is normal, but the sample rate is 8kHz, when until the day before it had always been 16kHz</li>
+          <li>Check the system state at the time: the phone system was upgraded the night before and its default recording format changed; speech recognition received a format it doesn't support and returned an empty result without raising an error</li>
+          <li>Conclusion: the model isn't broken, the upstream format changed. And our system failed silently, which is a problem to fix in its own right: an empty transcript should be treated as an error and trigger an alert</li>
+        </ol>
+      </div>
+      <p>To be able to follow that path, you need to have been recording:</p>
+      <ul>
+        <li><strong>About users</strong>: user ID, role, support center, client version, OS and browser</li>
+        <li><strong>About requests</strong>: <code>call_id</code>, trace ID, file size, recording length and format, timestamps and results for each stage</li>
+        <li><strong>About system state</strong>: deployed version, feature flag states, which worker processed it, health of dependencies at the time</li>
+      </ul>
+      <p>Especially <strong>version information.</strong> Conclusions like “only client version 2.3.1 has the problem” or “it started breaking after the phone system upgrade” are impossible to reach if you never recorded versions.</p>
+
+      <!-- Q18 -->
+      <h3 id="q18" class="post-q"><span class="post-q-num">Q18</span><span>How long is data retained? Is that acceptable for the system?</span></h3>
+      <p class="post-risk"><span>What they're really probing</span>Keep data forever and cost grows without limit; keep it too long and legal and breach risk grow with it.</p>
+      <p>Look back at the earlier numbers: 8.8TB of recordings a month. Kept forever, that's more than 100TB after a year and more than 300TB after three. At a rough $0.023 per GB per month for S3 Standard (actual prices vary by region), recordings alone cost over two thousand dollars a month after the first year, and the bill keeps climbing.</p>
+      <p>The common approach is <strong>tiering data by how often it's accessed</strong>:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Age</th><th>Storage</th><th>Use</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Under 30 days</td><td>Standard storage (S3 Standard)</td><td>Agents and managers often replay calls</td></tr>
+            <tr><td>30 days to 1 year</td><td>Infrequent-access or archive storage</td><td>Pulled up for complaint disputes; much cheaper per GB</td></tr>
+            <tr><td>Past the retention period</td><td>Deleted automatically (lifecycle policy)</td><td>Lower cost and less personal-data risk</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The retention period is <strong>not something engineers decide alone</strong>. Work it out with legal and security:</p>
+      <ul>
+        <li><strong>Too short</strong>: may fail audit or industry requirements (some industries require records to be kept for a set number of years)</li>
+        <li><strong>Too long</strong>: the longer personal data is kept, the bigger the impact of a breach, and it runs against privacy rules such as GDPR's storage-limitation principle, under which personal data shouldn't be kept longer than its purpose requires</li>
+      </ul>
+      <p>One last detail that often gets missed: <strong>deletion has to be complete.</strong> Delete the recordings but leave the backups, logs, derived transcripts, summaries, and search indexes behind, and you haven't really deleted anything.</p>
+
+      <!-- Closing -->
+      <hr />
+      <h2 id="closing"><span class="post-eyebrow">WRAP-UP</span>Wrapping up</h2>
+      <p>That's a lot of questions, but you don't need a perfect score on every one. The point isn't a thicker design doc. It's to help you do three things:</p>
+      <div class="post-takeaways">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+          </div>
+          <h3>Understand the problem</h3>
+          <p>Who uses it, what it solves, how it was done before, how big it is, and what it costs.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12M18 9v12"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="6" r="3"/></svg>
+          </div>
+          <h3>Offer choices</h3>
+          <p>At least two options, an honest comparison of trade-offs, and a written reason for your pick.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>Put the risks on the table</h3>
+          <p>Which risks you can accept and what they cost, and which ones are non-negotiable.</p>
+        </div>
+      </div>
+      <p>At a big company, one design decision affects several teams and years of operations. Spending a week or two thinking these questions through saves you months of landmines after launch.</p>
+      <p>Next time you're stuck on a design doc, try playing the reviewer and asking yourself these questions first. The ones you can answer go in the doc. The ones you can't are exactly where your thinking isn't done yet.</p>
+
+      <div class="post-end">
+        <a href="../" class="btn btn-secondary">← Back to the blog</a>
+        <a href="../../#projects" class="btn btn-primary">Explore the Arlo AI projects</a>
+      </div>
+    </article>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <svg class="nav-logo" width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <rect width="28" height="28" rx="7" fill="#5856D6"/>
+            <path d="M8 20L14 8L20 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10.6 15.4H17.4" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <span>Arlo AI</span>
+        </div>
+        <div class="footer-links">
+          <a href="https://rust.arlo-ai.app">Arlo Rust</a>
+          <a href="https://lite.arlo-ai.app">Arlo Lite</a>
+          <a href="https://ag-ui-rust.arlo-ai.app">AG-UI Rust</a>
+          <a href="https://github.com/kaija" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/kaija/arlo/blob/main/LICENSE" target="_blank" rel="noopener">License</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../main.js"></script>
+  <script>
+    // Table of contents: collapsed by default on narrow screens, and the entry for
+    // the section being read is highlighted as you scroll.
+    (function () {
+      'use strict';
+
+      var toc = document.querySelector('.post-toc');
+      if (!toc) return;
+
+      var narrow = window.matchMedia('(max-width: 900px)');
+      toc.open = !narrow.matches;
+      narrow.addEventListener('change', function (e) {
+        toc.open = !e.matches;
+      });
+
+      var links = {};
+      toc.querySelectorAll('a[href^="#"]').forEach(function (a) {
+        links[a.getAttribute('href').slice(1)] = a;
+      });
+
+      var headings = Array.prototype.filter.call(
+        document.querySelectorAll('.post-body h2[id], .post-body h3[id]'),
+        function (h) { return links[h.id]; }
+      );
+
+      var current = null;
+      var ticking = false;
+
+      function update() {
+        ticking = false;
+        var active = null;
+        for (var i = 0; i < headings.length; i++) {
+          // A little below the h2/h3 scroll-margin-top (96px), so a heading reached by
+          // a TOC click is already counted as the current section.
+          if (headings[i].getBoundingClientRect().top > 160) break;
+          active = headings[i];
+        }
+        var link = active ? links[active.id] : null;
+        if (link === current) return;
+        if (current) current.removeAttribute('aria-current');
+        if (link) link.setAttribute('aria-current', 'true');
+        current = link;
+
+        // Keep the highlighted entry in view when the sticky list itself scrolls.
+        if (link && toc.scrollHeight > toc.clientHeight) {
+          toc.scrollTop = link.offsetTop - toc.clientHeight / 2;
+        }
+      }
+
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          ticking = true;
+          window.requestAnimationFrame(update);
+        }
+      }, { passive: true });
+
+      update();
+    })();
+
+    // Each translation of a post is its own page. Remember the reader's choice the
+    // same way the hub's switcher does, so the rest of the site follows it.
+    document.querySelectorAll('.lang-switch a[data-lang]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        try {
+          localStorage.setItem('arloLang', a.dataset.lang);
+        } catch (e) {
+          /* private mode — the choice just won't persist */
+        }
+      });
+    });
+  </script>
+</body>
+</html>

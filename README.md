@@ -26,6 +26,7 @@ i18n.js       zh-Hant / ja overrides + the language switcher
 main.js       mobile nav toggle
 styles.css    design system shared with the three project sites
 404.html
+blog/         blog index + one folder per post: English at blog/<slug>/, translations in zh-Hant/ and ja/
 CNAME         arlo-ai.app
 ```
 
@@ -38,6 +39,9 @@ should change there too.
 English is hardcoded in `index.html`; `i18n.js` holds only the zh-Hant and ja overrides,
 keyed by the `data-i18n` attributes in the markup. Adding a string means adding it in both
 places. Locale selection is `?lang=` → `localStorage` → English.
+
+Blog posts don't use `i18n.js`: each post is three static pages (`blog/<slug>/`,
+`blog/<slug>/zh-Hant/`, `blog/<slug>/ja/`) linked with `hreflang` and a language switcher.
 
 ## Deploy
 
