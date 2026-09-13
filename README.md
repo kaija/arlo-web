@@ -1,6 +1,6 @@
 # arlo-web
 
-The Arlo AI landing site — [arlo-ai.app](https://arlo-ai.app).
+The Arlo AI landing site — [www.arlo-ai.app](https://www.arlo-ai.app/).
 
 A static front door for the three Arlo AI open-source projects:
 
@@ -27,7 +27,7 @@ main.js       mobile nav toggle
 styles.css    design system shared with the three project sites
 404.html
 blog/         blog index + one folder per post: English at blog/<slug>/, translations in zh-Hant/ and ja/
-CNAME         arlo-ai.app
+CNAME         www.arlo-ai.app
 ```
 
 `styles.css` is the same design system as the project sites (Inter, accent `#5856D6`,

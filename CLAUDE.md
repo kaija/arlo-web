@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-The landing site for Arlo AI at the apex domain **arlo-ai.app**. It is only a website —
+The landing site for Arlo AI at **www.arlo-ai.app** (the apex `arlo-ai.app` 301s there). It is only a website —
 no application code. Static HTML/CSS/JS with **no build step and no dependencies**; a push
 to `main` publishes the repo root to GitHub Pages via `.github/workflows/deploy.yml`.
 
@@ -20,7 +20,7 @@ main.js      mobile nav toggle (copied verbatim from arlo-lite's site)
 styles.css   design system shared with all three project sites
 404.html
 blog/        index.html lists posts; each post is blog/<slug>/index.html (see "Blog")
-CNAME        arlo-ai.app
+CNAME        www.arlo-ai.app
 .nojekyll    without it, Pages' Jekyll silently drops _-prefixed paths
 ```
 
@@ -129,5 +129,9 @@ Push to `main` — `.github/workflows/deploy.yml` uploads the repo root and depl
 Repo Settings → Pages → Source must be **GitHub Actions** (not "Deploy from a branch"), or
 the workflow fails at `configure-pages`. `.git` and `.github` are excluded from the
 artifact; everything else ships, including `CNAME`.
+
+The Pages custom domain is `www.arlo-ai.app`, and GitHub redirects the apex to it. Absolute
+URLs in the markup (`canonical`, `og:url`, `hreflang`) must use `https://www.arlo-ai.app/`,
+not the apex, or they point search engines at a redirect.
 
 DNS for the apex and the `rust` subdomain is managed in Route 53 outside this repo.
