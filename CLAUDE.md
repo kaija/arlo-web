@@ -111,6 +111,12 @@ blog/<slug>/ja/index.html
 - Adding a post means three pages, plus a card in `blog/index.html` with its `blog.<post>.*`
   keys in both locales of `i18n.js` (the card's `href` is swapped per locale too). Start by
   copying an existing post; its translations share an identical element skeleton.
+- Earlier posts live in `kaija/arlo-blog` (checked out beside this repo as `arlo-blog`),
+  published at `blog.arlo-ai.app` by that repo's own generator. They are not copied here —
+  `blog/index.html` lists them as cards linking to
+  `https://blog.arlo-ai.app/<lang>/posts/<slug>.html`, with each locale's title, excerpt, read
+  time, and `href` in `i18n.js`. When a post is published there, add its card here too. Keep
+  the list newest first.
 - Post pages **don't load `i18n.js`**. Nav and footer labels are hardcoded per locale, and
   the `.lang-switch` holds links to the sibling translations rather than buttons. Clicking one
   also writes `localStorage.arloLang`, so the hub and blog index follow the reader's choice.

@@ -78,7 +78,17 @@
       'blog.systemDesign.href': 'system-design-before-code/zh-Hant/',
       'blog.systemDesign.title': '大公司裡的軟體開發：寫 Code 之前，你該先想清楚的事',
       'blog.systemDesign.excerpt': '從「為什麼要做」到 Design Review，設計系統時該問哪些問題、每個問題背後在防什麼風險，用一個客服通話摘要系統的例子從頭講到尾。',
-      'blog.systemDesign.readTime': '閱讀時間約 25 分鐘'
+      'blog.systemDesign.readTime': '閱讀時間約 25 分鐘',
+      'pills.monitoring': '監控',
+      'pills.cloudCost': '雲端成本',
+      'blog.monitoringDrift.href': 'https://blog.arlo-ai.app/zh-Hant/posts/monitoring-drift.html',
+      'blog.monitoringDrift.title': '漫談 monitor：監控如何跟著時代一起演進',
+      'blog.monitoringDrift.excerpt': '從 vSphere 上的虛擬機、雲端 auto scaling、container 到 Lambda，我經歷過的每個階段，監控在意的東西都往上漂移了一層。',
+      'blog.monitoringDrift.readTime': '閱讀時間約 6 分鐘',
+      'blog.unknownKnown.href': 'https://blog.arlo-ai.app/zh-Hant/posts/unknown-known-monitoring-gap.html',
+      'blog.unknownKnown.title': 'Unknown Known：當監控的建構速度跟不上資源創建',
+      'blog.unknownKnown.excerpt': '一次 Kubernetes PD 帳單事故，牽出中央集權與分散開發兩種基礎設施治理模式的取捨，以及讓監控自動跟上資源創建速度的解法。',
+      'blog.unknownKnown.readTime': '閱讀時間約 3 分鐘'
     },
 
     ja: {
@@ -142,7 +152,17 @@
       'blog.systemDesign.href': 'system-design-before-code/ja/',
       'blog.systemDesign.title': '大企業のソフトウェア開発：コードを書く前に考え抜くべきこと',
       'blog.systemDesign.excerpt': '「なぜ作るのか」からデザインレビューまで。システム設計で問うべきことと、その問いが防ごうとしているリスクを、コールセンターの通話要約システムという実例を通して解説します。',
-      'blog.systemDesign.readTime': '読了時間 約35分'
+      'blog.systemDesign.readTime': '読了時間 約35分',
+      'pills.monitoring': '監視',
+      'pills.cloudCost': 'クラウドコスト',
+      'blog.monitoringDrift.href': 'https://blog.arlo-ai.app/ja/posts/monitoring-drift.html',
+      'blog.monitoringDrift.title': 'monitor 漫談：監視は時代とともにどう進化してきたか',
+      'blog.monitoringDrift.excerpt': 'vSphere 上の仮想マシンから、クラウドの auto scaling、container、そして Lambda へ。自分が通ってきたそれぞれの段階で、監視が気にかけるものは一段ずつ上へ移っていった。',
+      'blog.monitoringDrift.readTime': '読了時間 約7分',
+      'blog.unknownKnown.href': 'https://blog.arlo-ai.app/ja/posts/unknown-known-monitoring-gap.html',
+      'blog.unknownKnown.title': 'Unknown Known：監視の構築速度がリソース作成に追いつかないとき',
+      'blog.unknownKnown.excerpt': 'Kubernetes の永続ディスクが原因の高額請求事故をきっかけに、中央集権型と分散開発型というふたつのインフラ統治モデルのトレードオフと、リソース作成に自動で追従する監視の作り方を考える。',
+      'blog.unknownKnown.readTime': '読了時間 約5分'
     }
   };
 
